@@ -1,4 +1,5 @@
 ﻿using Assets.Game.Core.Pathfinding;
+using Assets.Game.Core.Time;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Assets.Game.Models.MapModels
     {
         private MapCell[,] _map;
         private GridGraph _graph;
+        private GameTime _gameTime;
 
         public MapCell this[int x, int y]
         {
@@ -19,9 +21,11 @@ namespace Assets.Game.Models.MapModels
         }
 
         public GridGraph Graph => _graph;
+        public GameTime GameTime => _gameTime;
 
         public LevelMap(MapCell[,] map)
         {
+            _gameTime = new GameTime(3600);
             _map = map;
             _graph = new GridGraph(_map.GetLength(0), _map.GetLength(1));
             foreach(var mapCell in _map)
@@ -40,11 +44,9 @@ namespace Assets.Game.Models.MapModels
             return player;
         }
 
-        //public GridNode NodeFromWorldPoint(Vector3 worldPosition)
-        //{
-        //    int x = Mathf.FloorToInt(worldPosition.x + (_map.GetLength(0) / 2));
-        //    int y = Mathf.FloorToInt(worldPosition.y + (_map.GetLength(1) / 2));
-        //    return _graph[x, y];
-        //}
+        public void Update(float deltaTime)
+        {
+            _gameTime.Update(deltaTime);
+        }
     }
 }

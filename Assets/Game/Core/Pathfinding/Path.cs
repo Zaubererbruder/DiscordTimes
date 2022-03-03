@@ -25,7 +25,9 @@ namespace Assets.Game.Core.Pathfinding
 
         public T StartNode => _start;
         public T EndNode => _end;
+        public T NextNode => _path.Peek();
         public IEnumerable<T> PathNodes => _path;
+        public int Count => _path.Count;
 
         public virtual Path<T> Copy()
         {
@@ -40,6 +42,17 @@ namespace Assets.Game.Core.Pathfinding
             _end = node;
             _path.Enqueue(node);
             
+        }
+
+        public T Dequeue()
+        {
+            if(_path.Count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            var first = _path.Dequeue();
+            _start = first;
+            return first;
         }
     }
 }

@@ -53,8 +53,8 @@ namespace Assets.Game.Core.Pathfinding
 
         private bool DiagonalNodes(GridNode first, GridNode second)
         {
-            if (Math.Min(first.GridPosition.x, second.GridPosition.x) + 1 == Math.Max(first.GridPosition.x, second.GridPosition.x) &&
-                    Math.Min(first.GridPosition.y, second.GridPosition.y) + 1 == Math.Max(first.GridPosition.y, second.GridPosition.y))
+            if (Math.Min(first.X, second.X) + 1 == Math.Max(first.X, second.X) &&
+                    Math.Min(first.Y, second.Y) + 1 == Math.Max(first.Y, second.Y))
                 return true;
 
             return false;

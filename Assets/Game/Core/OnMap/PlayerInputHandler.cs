@@ -30,6 +30,11 @@ namespace Assets.Core.OnMap
         {
         }
 
+        private void Update()
+        {
+            _player?.Update(Time.deltaTime);
+        }
+
         public void Init(Grid2D grid, Player player)
         {
             _grid = grid;

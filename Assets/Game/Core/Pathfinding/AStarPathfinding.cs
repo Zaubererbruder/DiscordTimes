@@ -51,7 +51,10 @@ namespace Assets.Game.Core.Pathfinding
                     continue;
 
                 if (node.Equals(goal))
+                {
+                    currentPath.Dequeue();
                     return currentPath;
+                }
 
                 _closedValues.Add(node);
 
