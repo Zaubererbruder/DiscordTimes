@@ -3,10 +3,13 @@ using Assets.Game.Core.OnMap;
 using Assets.Game.Core.Pathfinding;
 using Assets.Game.Core.Presenters;
 using Assets.Game.Core.Presenters.Map;
+using Assets.Game.Core.Spawners;
 using Assets.Game.Core.Time;
 using Assets.Game.Models.MapModels;
+using Assets.Game.Models.MapModels.Spawners;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 namespace Assets.Core
@@ -23,6 +26,7 @@ namespace Assets.Core
 
         private Grid2D _grid;
         private LevelMap _map;
+        private List<IPawnFactory> factories = new List<IPawnFactory>();
         //private PlayerPawn _player;
 
         public GameTime GameTime => _map.GameTime;
@@ -34,24 +38,49 @@ namespace Assets.Core
 
             _map = new LevelMap(_grid.ReadMapCells());
             _map.Graph.SetDiagMovementRate(_diagMovementrate);
-            //var playerPoint = _grid.GridPositionFromWorldPoint(_playerObj.transform.position);
 
-            var playerSpawnerPoint = _grid.GridPositionFromWorldPoint(_transformPlayerSpawner.position);
-            var playerSpawner = new PlayerPawnSpawner(_map, playerSpawnerPoint.x, playerSpawnerPoint.y);
-            playerSpawner.PawnSpawned += PlayerSpawner_PawnSpawned;
-            _map.AddOnstartableModel(playerSpawner);
-
-            _map.Start();
-
+            var spawners = FindObjectsOfType<SpawnerBehaviour>();
+            foreach (var spawner in spawners)
+            {
+                var spawnerPoint = _grid.GridPositionFromWorldPoint(spawner.WorldPosition);
+                if (spawner.IsPlayerControlled)
+                {
+                    var playerFactory = new PlayerPawnFactory(_map);
+                    playerFactory.SetPosition(spawnerPoint.x, spawnerPoint.y);
+                    _map.AddOnstartableModel(playerFactory);
+                    factories.Add(playerFactory);
+                }
+            }
         }
 
-        private void PlayerSpawner_PawnSpawned(PlayerPawn pawn)
+        private void OnEnable()
         {
-            var worldPos = _grid.WorldPointFromGridPosition(new Vector2Int(pawn.X, pawn.Y));
-            var obj = Instantiate(_playerObj, worldPos, Quaternion.identity, _playerPawnParent);
-            obj.GetComponent<PlayerInputHandler>().Init(_grid, pawn, _map);
-            obj.GetComponent<PathPresenter>().Init(_grid, pawn);
-            obj.GetComponent<PlayerPresenter>().Init(_grid, pawn);
+            factories.ForEach((factory) => factory.PawnSpawned += PlayerSpawner_PawnSpawned);
         }
+
+        private void OnDisable()
+        {
+            factories.ForEach((factory) => factory.PawnSpawned -= PlayerSpawner_PawnSpawned);
+        }
+
+        private void Start()
+        {
+            _map.Start();
+        }
+
+        private void PlayerSpawner_PawnSpawned(Pawn pawn)
+        {
+            var transform = pawn.GetComponent<PawnTransform>();
+            var worldPos = _grid.WorldPointFromGridPosition(new Vector2Int(transform.X, transform.Y));
+            if (pawn.isPlayerControlled)
+            {
+                var obj = Instantiate(_playerObj, worldPos, Quaternion.identity, _playerPawnParent);
+                obj.GetComponent<PawnPresenter>().Init(_grid, pawn).enabled = true;
+                obj.GetComponent<PlayerInputHandler>().Init(_grid, pawn, _map).enabled = true;
+                obj.GetComponent<PathPresenter>().Init(_grid, pawn).enabled = true;
+            }
+            Debug.Log($"Pawn spawned {pawn}. IsPlayerControlled: {pawn.isPlayerControlled}");
+        }
+
     }
 }

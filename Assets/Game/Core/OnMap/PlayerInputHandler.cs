@@ -16,11 +16,11 @@ namespace Assets.Core.OnMap
 {
     public class PlayerInputHandler : MonoBehaviour
     {
-        [SerializeField] private GameObject _pathObj;
-
         private Transform _transform;
         private Grid2D _grid;
-        private PlayerPawn _player;
+        private Pawn _player;
+        private PawnPathMovement _pawnMovement;
+        private PawnTransform _pawnTransform;
         private LevelMap _map;
         private bool _isMoving = false;
         private Vector2Int _pathEndPos;
@@ -30,8 +30,25 @@ namespace Assets.Core.OnMap
             _transform = transform;  
         }
 
+        private void OnEnable()
+        {
+            if (_pawnMovement == null)
+                return;
+
+            _pawnMovement.PathUpdated += OnPathEndedHandler;
+        }
+
+        private void OnDisable()
+        {
+            if (_pawnMovement == null)
+                return;
+
+            _pawnMovement.PathUpdated -= OnPathEndedHandler;
+        }
+
         private void Start()
         {
+
         }
 
         private void Update()
@@ -42,13 +59,25 @@ namespace Assets.Core.OnMap
             }
         }
 
-        public void Init(Grid2D grid, PlayerPawn player, LevelMap map)
+        public PlayerInputHandler Init(Grid2D grid, Pawn player, LevelMap map)
         {
             _grid = grid;
             _player = player;
-            _player.PathUpdated += (path) => { if (path.Count == 0) _isMoving = false; };
+            _pawnMovement = _player.GetComponent<PawnPathMovement>();
+            _pawnTransform = _player.GetComponent<PawnTransform>();
             _map = map;
-            _pathEndPos = new Vector2Int(_player.X, _player.Y);
+            _pathEndPos = new Vector2Int(_pawnTransform.X, _pawnTransform.Y);
+
+            if (enabled)
+                OnEnable();
+
+            return this;
+        }
+
+        public void OnPathEndedHandler(GridPath path)
+        {
+            if (path.Count == 0) 
+                _isMoving = false;
         }
 
         public void OnMoveHandler(CallbackContext context)
@@ -61,7 +90,7 @@ namespace Assets.Core.OnMap
 
             var goalPosition = _grid.GridPositionFromWorldPoint(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()));
 
-            if (goalPosition.x == _player.X && goalPosition.y == _player.Y)
+            if (goalPosition.x == _pawnTransform.X && goalPosition.y == _pawnTransform.Y)
                 return;
 
             if (goalPosition.x == _pathEndPos.x && goalPosition.y == _pathEndPos.y)
@@ -73,7 +102,7 @@ namespace Assets.Core.OnMap
             {
                 Debug.Log($"Path setted x:{goalPosition.x}, y:{goalPosition.y}");
                 _isMoving = false;
-                _player.SetPath(goalPosition.x, goalPosition.y);
+                _pawnMovement.GeneratePath(goalPosition.x, goalPosition.y);
             }
             _pathEndPos = goalPosition;
         }

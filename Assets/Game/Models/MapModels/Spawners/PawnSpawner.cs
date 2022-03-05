@@ -23,7 +23,6 @@ namespace Assets.Game.Models.MapModels
         protected virtual void Spawn()
         {
             TPawn pawn = new TPawn();
-            pawn.SetMap(_map, _x, _y);
             _map.AddPawnToMap(pawn);
             PawnSpawned?.Invoke(pawn);
         }

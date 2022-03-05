@@ -8,9 +8,10 @@ using UnityEngine;
 
 namespace Assets.Game.Core.Presenters.Map
 {
-    public class PlayerPresenter : MonoBehaviour
+    public class PawnPresenter : MonoBehaviour
     {
-        private PlayerPawn _player;
+        private Pawn _player;
+        private PawnTransform _pawnTransform;
         private Transform _transform;
         private Grid2D _grid;
 
@@ -19,21 +20,17 @@ namespace Assets.Game.Core.Presenters.Map
             _transform = transform;
         }
 
-        public void Init(Grid2D grid, PlayerPawn player)
+        public PawnPresenter Init(Grid2D grid, Pawn player)
         {
             _grid = grid;
             _player = player;
-            _player.PositionUpdated += UpdatePosition;
-        }
-
-        private void UpdatePosition(int x, int y)
-        {
-            _transform.position = _grid.WorldPointFromGridPosition(new Vector2Int(_player.X, _player.Y));
+            _pawnTransform = player.GetComponent<PawnTransform>();
+            return this;
         }
 
         private void Update()
         {
-
+            _transform.position = _grid.WorldPointFromGridPosition(new Vector2Int(_pawnTransform.X, _pawnTransform.Y));
         }
     }
 }

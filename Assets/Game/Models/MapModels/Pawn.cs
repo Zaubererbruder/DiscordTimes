@@ -7,51 +7,41 @@ using System.Threading.Tasks;
 
 namespace Assets.Game.Models.MapModels
 {
-    public abstract class Pawn
+    public class Pawn
     {
-        private LevelMap _map;
-        private AStarGridPathfinding _pathfinding;
-        private PawnMovement _movement;
+        List<PawnComponent> _components = new List<PawnComponent>();
+        private int _teamNumber;
 
-        public Pawn()
+        public Pawn(int team)
         {
-            
+            _teamNumber = team;
         }
 
-        public void SetMap(LevelMap map, int x, int y)
+        public bool isPlayerControlled => _teamNumber == 0;
+
+        public void AttachComponent(PawnComponent component)
         {
-            _map = map;
-            _movement = new PawnMovement(map, x, y);
-            _movement.PositionUpdated += () => PositionUpdated?.Invoke(X, Y);
-            _movement.PathUpdated += () => PathUpdated?.Invoke(_movement.Path);
-            _movement.SetSpeed(5);
-            _pathfinding = new AStarGridPathfinding(_map.Graph);
+            if (component == null)
+                throw new ArgumentNullException(nameof(component));
+
+            component.Owner = this;
+            component.Init();
+            _components.Add(component);
         }
 
-        public event Action<GridPath> PathUpdated;
-        public event Action<int, int> PositionUpdated;
-
-        public int X => _movement.X;
-        public int Y => _movement.Y;
-
-        public void SetPath(int x, int y)
+        public T GetComponent<T>() where T:PawnComponent
         {
-            var startNode = _map.Graph[X, Y];
-            var endNode = _map.Graph[x, y];
-            if (endNode == null)
-                return;
-
-            if (startNode == endNode)
-                return;
-
-            var path = _pathfinding.Search(startNode, endNode);
-            _movement.SetPath(path);
+            foreach(var comp in _components)
+            {
+                if (comp is T)
+                    return (T)comp;
+            }
+            return null;
         }
-
 
         internal void Update(float deltatime)
         {
-            _movement?.Update(deltatime);
+            _components.ForEach((comp) => comp.Update(deltatime));
         }
     }
 }

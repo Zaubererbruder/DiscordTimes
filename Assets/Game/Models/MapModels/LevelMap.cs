@@ -1,5 +1,6 @@
 ﻿using Assets.Game.Core.Pathfinding;
 using Assets.Game.Core.Time;
+using Assets.Game.Models.MapModels.Spawners;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Assets.Game.Models.MapModels
         private List<Pawn> _pawns = new List<Pawn>();
         private List<IOnStartableModel> _onStarables = new List<IOnStartableModel>();
         private List<IUpdateableModel> _updateables = new List<IUpdateableModel>();
+        private IPawnFactory _pawnBuilder;
 
         public MapCell this[int x, int y]
         {
@@ -25,6 +27,8 @@ namespace Assets.Game.Models.MapModels
 
         public GridGraph Graph => _graph;
         public GameTime GameTime => _gameTime;
+
+        public IReadOnlyList<Pawn> Pawns => _pawns;
 
         public LevelMap(MapCell[,] map)
         {
@@ -38,6 +42,7 @@ namespace Assets.Game.Models.MapModels
 
                 _graph.AddNode(mapCell.X, mapCell.Y, mapCell.Cost);
             }
+            _pawnBuilder = new PlayerPawnFactory(this);
         }
 
         public void Start()
@@ -48,13 +53,6 @@ namespace Assets.Game.Models.MapModels
         private void OnStart()
         {
             _onStarables.ForEach((onstartable) => onstartable.OnStart());
-        }
-
-        public PlayerPawn CreatePlayer(int x, int y)
-        {
-            var player = new PlayerPawn();
-            //TODO Check mapcell accessibility
-            return player;
         }
 
         public void Update(float deltaTime)
@@ -78,5 +76,6 @@ namespace Assets.Game.Models.MapModels
         {
             _onStarables.Add(onstrtModel);
         }
+
     }
 }

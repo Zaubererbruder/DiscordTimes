@@ -16,15 +16,37 @@ namespace Assets.Game.Core.Presenters
 
         private Grid2D _grid;
         private List<GameObject> _pointsObjects = new List<GameObject>();
+        private PawnPathMovement _pawnMovement;
 
-        private PlayerPawn _player;
+        private Pawn _player;
+        public void OnEnable()
+        {
+            if (_pawnMovement == null)
+                return;
 
-        public void Init(Grid2D grid, PlayerPawn player)
+            _pawnMovement.PathUpdated += OnPathUpdateHandler;
+        }
+
+        public void OnDisable()
+        {
+            if (_pawnMovement == null)
+                return;
+
+            _pawnMovement.PathUpdated -= OnPathUpdateHandler;
+        }
+
+        public PathPresenter Init(Grid2D grid, Pawn player)
         {
             _grid = grid;
             _player = player;
-            _player.PathUpdated += OnPathUpdateHandler;
+            _pawnMovement = player.GetComponent<PawnPathMovement>();
+
+            if (enabled)
+                OnEnable();
+
+            return this;
         }
+
 
         private void OnPathUpdateHandler(GridPath path)
         {

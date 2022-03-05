@@ -10,12 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3580133330498336212}
   - component: {fileID: 3580133330498336215}
-  - component: {fileID: 3580133330498336214}
-  - component: {fileID: 3580133330498336208}
   - component: {fileID: 3580133330498336210}
-  - component: {fileID: 3580133330498336211}
   m_Layer: 0
-  m_Name: Player
+  m_Name: PawnPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,65 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3580133330498336214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3580133330498336213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1127a693742f7a4fbd8d80bb536f238, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _pathObj: {fileID: 4584394268713503597, guid: 44151860a0056634f89b5ae78d8ae0ae, type: 3}
---- !u!114 &3580133330498336208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3580133330498336213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: faee577656f0c704ba0d4948463e567e, type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3580133330498336214}
-        m_TargetAssemblyTypeName: Assets.Core.OnMap.PlayerInputHandler, Assembly-CSharp
-        m_MethodName: OnMoveHandler
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: f2bc8903-e77b-414a-a656-d39d6dd32596
-    m_ActionName: OnMap/Move[/Mouse/leftButton]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: OnMap
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &3580133330498336210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,22 +92,8 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3580133330498336213}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 64b79881438945243b4c1d39a1123a1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3580133330498336211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3580133330498336213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1ab2e593c309fc4db2b41a31a53a78f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _pathObj: {fileID: 4584394268713503597, guid: 44151860a0056634f89b5ae78d8ae0ae, type: 3}
-  _parentForPathObjs: {fileID: 0}

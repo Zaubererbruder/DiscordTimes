@@ -7,46 +7,50 @@ using System.Threading.Tasks;
 
 namespace Assets.Game.Models.MapModels
 {
-    internal class PawnMovement
+    public class PawnPathMovement : PawnComponent
     {
-        private int _x, _y;
+        private PawnTransform _transform;
+        private AStarGridPathfinding _pathfinding;
         private GridPath _path;
-        private LevelMap _map;
         private GridNode _currentNode;
         private float _movementProgress;
         private float _movementCost;
 
         private float _costMultiplier = 1;
 
-        public PawnMovement(LevelMap map, int x, int y)
+        public PawnPathMovement()
         {
-            _map = map;
-            _x = x;
-            _y = y;
+
         }
 
-        internal int X => _x;
-        internal int Y => _y;
+        public override void Init()
+        {
+            _transform = GetComponent<PawnTransform>();
+            if (_transform == null)
+                throw new InvalidOperationException("PawnMovement Component needs also PawnTransform Component");
+
+            _pathfinding = new AStarGridPathfinding(_transform.Graph);
+            base.Init();
+        }
+
         internal GridPath Path => _path;
 
-        internal event Action PositionUpdated;
-        internal event Action PathUpdated;
+        public event Action<GridPath> PathUpdated;
 
         private void SetNextNode()
         {
             _currentNode = _path.Dequeue();
-            _x = _currentNode.X;
-            _y = _currentNode.Y;
-            PositionUpdated?.Invoke();
+            _transform.X = _currentNode.X;
+            _transform.Y = _currentNode.Y;
             _movementProgress = 0;
-            PathUpdated?.Invoke();
+            PathUpdated?.Invoke(_path);
             if (_path.Count == 0)
             {
                 _path = null;
                 return;
             }
 
-            _movementCost = _map.Graph.Cost(_currentNode, _path.NextNode) * _costMultiplier;
+            _movementCost = _transform.Graph.Cost(_currentNode, _path.NextNode) * _costMultiplier;
         }
 
         /// <summary>
@@ -69,16 +73,31 @@ namespace Assets.Game.Models.MapModels
             return _path.Equals(path);
         }
 
+        public void GeneratePath(int x, int y)
+        {
+            var startNode = _transform.CurrentNode;
+            var endNode = _transform.Graph[x, y];
+
+            if (endNode == null)
+                return;
+
+            if (startNode == endNode)
+                return;
+
+            var path = _pathfinding.Search(startNode, endNode);
+            SetPath(path);
+        }
+
         internal void SetPath(GridPath path)
         {
-            if (path.NextNode.X != _x || path.NextNode.Y != _y)
+            if (path.NextNode.X != _transform.X || path.NextNode.Y != _transform.Y)
                 throw new ArgumentException("Wrong path. Path must be start from pawn position", nameof(path));
 
             _path = path;
             SetNextNode();
         }
 
-        internal void Update(float deltaTime)
+        internal override void Update(float deltaTime)
         {
             if (_path == null)
                 return;

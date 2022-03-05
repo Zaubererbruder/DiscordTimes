@@ -462,7 +462,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1098847697}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &164932755
 TilemapRenderer:
@@ -1460,7 +1460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0687e1d6c2d78d5429762fc980fc4e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerObj: {fileID: 3580133330498336213, guid: 7e2a0851ceb11664e8dc6c78f12fde46, type: 3}
+  _playerObj: {fileID: 9012536100501584070, guid: 93565fa47aab58640b93f48ff7f2cdab, type: 3}
   _gridWorldSize: {x: 44, y: 20}
   _nodeRadius: 0.5
   _pathfindingMap: {fileID: 1043124978}
@@ -9844,7 +9844,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1098847697}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &1073244058
 TilemapRenderer:
@@ -18936,8 +18936,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 164932754}
   - {fileID: 1073244057}
+  - {fileID: 164932754}
   - {fileID: 391872388}
   - {fileID: 742431074}
   - {fileID: 201959179}
@@ -19151,6 +19151,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1348153560}
   - component: {fileID: 1348153561}
+  - component: {fileID: 1348153562}
   m_Layer: 0
   m_Name: PlayerSpawner
   m_TagString: Untagged
@@ -19225,6 +19226,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1348153562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348153559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431b84ec3e1a3a345939a1486048e860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _team: 0
+  _isPlayerControlled: 1
 --- !u!1 &1393481024
 GameObject:
   m_ObjectHideFlags: 0
