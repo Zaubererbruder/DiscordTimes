@@ -13,6 +13,9 @@ namespace Assets.Game.Models.MapModels
         private MapCell[,] _map;
         private GridGraph _graph;
         private GameTime _gameTime;
+        private List<Pawn> _pawns = new List<Pawn>();
+        private List<IOnStartableModel> _onStarables = new List<IOnStartableModel>();
+        private List<IUpdateableModel> _updateables = new List<IUpdateableModel>();
 
         public MapCell this[int x, int y]
         {
@@ -37,9 +40,19 @@ namespace Assets.Game.Models.MapModels
             }
         }
 
-        public Player CreatePlayer(int x, int y)
+        public void Start()
         {
-            var player = new Player(this, x, y);
+            OnStart();
+        }
+
+        private void OnStart()
+        {
+            _onStarables.ForEach((onstartable) => onstartable.OnStart());
+        }
+
+        public PlayerPawn CreatePlayer(int x, int y)
+        {
+            var player = new PlayerPawn();
             //TODO Check mapcell accessibility
             return player;
         }
@@ -47,6 +60,23 @@ namespace Assets.Game.Models.MapModels
         public void Update(float deltaTime)
         {
             _gameTime.Update(deltaTime);
+            _pawns.ForEach((pawn) => pawn?.Update(deltaTime));
+            _updateables.ForEach((upd) => upd.Update(deltaTime));
+        }
+
+        public void AddPawnToMap(Pawn pawn) 
+        {
+            _pawns.Add(pawn);
+        }
+
+        public void AddUpdateableModel(IUpdateableModel updModel)
+        {
+            _updateables.Add(updModel);
+        }
+
+        public void AddOnstartableModel(IOnStartableModel onstrtModel)
+        {
+            _onStarables.Add(onstrtModel);
         }
     }
 }

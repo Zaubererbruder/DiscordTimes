@@ -9,7 +9,6 @@ namespace Assets.Game.Core.Pathfinding
     public class Path<T>
     {
         private Queue<T> _path = new Queue<T>();
-        private T _start;
         private T _end;
         
         public Path()
@@ -19,11 +18,9 @@ namespace Assets.Game.Core.Pathfinding
         public Path(Path<T> oldPath)
         {
             _path = new Queue<T>(oldPath._path);
-            _start = oldPath._start;
             _end = oldPath._end;
         }
 
-        public T StartNode => _start;
         public T EndNode => _end;
         public T NextNode => _path.Peek();
         public IEnumerable<T> PathNodes => _path;
@@ -37,8 +34,6 @@ namespace Assets.Game.Core.Pathfinding
 
         public void AddNodeToPath(T node)
         {
-            if (_path.Count == 0)
-                _start = node;
             _end = node;
             _path.Enqueue(node);
             
@@ -51,8 +46,16 @@ namespace Assets.Game.Core.Pathfinding
                 throw new IndexOutOfRangeException();
             }
             var first = _path.Dequeue();
-            _start = first;
             return first;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+                return false;
+
+            Path<T> p = (Path<T>)obj;
+            return PathNodes.SequenceEqual(p.PathNodes);
         }
     }
 }

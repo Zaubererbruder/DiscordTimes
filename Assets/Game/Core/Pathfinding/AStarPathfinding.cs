@@ -52,7 +52,6 @@ namespace Assets.Game.Core.Pathfinding
 
                 if (node.Equals(goal))
                 {
-                    currentPath.Dequeue();
                     return currentPath;
                 }
 

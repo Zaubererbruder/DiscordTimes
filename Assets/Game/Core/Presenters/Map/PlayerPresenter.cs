@@ -10,7 +10,7 @@ namespace Assets.Game.Core.Presenters.Map
 {
     public class PlayerPresenter : MonoBehaviour
     {
-        private Player _player;
+        private PlayerPawn _player;
         private Transform _transform;
         private Grid2D _grid;
 
@@ -19,7 +19,7 @@ namespace Assets.Game.Core.Presenters.Map
             _transform = transform;
         }
 
-        public void Init(Grid2D grid, Player player)
+        public void Init(Grid2D grid, PlayerPawn player)
         {
             _grid = grid;
             _player = player;

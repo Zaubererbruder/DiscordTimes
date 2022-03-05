@@ -17,9 +17,9 @@ namespace Assets.Game.Core.Presenters
         private Grid2D _grid;
         private List<GameObject> _pointsObjects = new List<GameObject>();
 
-        private Player _player;
+        private PlayerPawn _player;
 
-        public void Init(Grid2D grid, Player player)
+        public void Init(Grid2D grid, PlayerPawn player)
         {
             _grid = grid;
             _player = player;
