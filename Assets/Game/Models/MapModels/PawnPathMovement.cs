@@ -20,7 +20,7 @@ namespace Assets.Game.Models.MapModels
 
         public PawnPathMovement()
         {
-
+            
         }
 
         public override void Init()
@@ -30,6 +30,8 @@ namespace Assets.Game.Models.MapModels
                 throw new InvalidOperationException("PawnMovement Component needs also PawnTransform Component");
 
             _pathfinding = new AStarGridPathfinding(_transform.Graph);
+            _currentNode = _transform.CurrentNode;
+            _currentNode.TempCost = 99;
             base.Init();
         }
 
@@ -39,7 +41,9 @@ namespace Assets.Game.Models.MapModels
 
         private void SetNextNode()
         {
+            _currentNode.TempCost = 0;
             _currentNode = _path.Dequeue();
+            _currentNode.TempCost = 99;
             _transform.X = _currentNode.X;
             _transform.Y = _currentNode.Y;
             _movementProgress = 0;
@@ -50,7 +54,7 @@ namespace Assets.Game.Models.MapModels
                 return;
             }
 
-            _movementCost = _transform.Graph.Cost(_currentNode, _path.NextNode) * _costMultiplier;
+            _movementCost = _transform.Graph.TerrainCost(_currentNode, _path.NextNode) * _costMultiplier;
         }
 
         /// <summary>

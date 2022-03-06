@@ -1,10 +1,4 @@
-﻿using Assets.Game.Models.MapModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Game.Core.Spawners
 {
@@ -17,12 +11,12 @@ namespace Assets.Game.Core.Spawners
         public bool IsPlayerControlled =>_isPlayerControlled;
         public Vector3 WorldPosition => _transform.position;
 
-        private void Awake()
+        public void Init()
         {
             _transform = transform;
-            if(_isPlayerControlled)
+            if (_isPlayerControlled)
             {
-                
+
             }
         }
     }

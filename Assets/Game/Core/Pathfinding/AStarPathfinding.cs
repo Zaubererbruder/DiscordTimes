@@ -58,9 +58,7 @@ namespace Assets.Game.Core.Pathfinding
                 _closedValues.Add(node);
 
                 foreach (var next in _graph.Neighbours(node))
-                {
-                    
-                    
+                {                  
                     var newPath = PathTo(currentPath, next);
                     var newCost = GCost(newPath) + Heuristic(next, goal);
                     frontier.Enqueue(newPath, newCost);

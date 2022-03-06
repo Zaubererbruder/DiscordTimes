@@ -45,7 +45,10 @@ namespace Assets.Game.Core.Pathfinding
         {
             if(x >= 0 && x < gridSizeX && y >= 0 && y < gridSizeY)
             {
-                return _grid[x, y] != null;
+                if (_grid[x, y] == null)
+                    return false;
+
+                return !_grid[x, y].Obstacle;
             }
             
             return false;
@@ -105,6 +108,14 @@ namespace Assets.Game.Core.Pathfinding
                 return second.Cost * _diagMovementRate;
             
             return second.Cost;
+        }
+
+        public float TerrainCost(GridNode first, GridNode second)
+        {
+            if (DiagonalNodes(first, second))
+                return second.TerrainCost * _diagMovementRate;
+
+            return second.TerrainCost;
         }
     }
 }

@@ -16,7 +16,8 @@ namespace Assets.Core
 {
     public class Level : MonoBehaviour
     {
-        [SerializeField] private GameObject _playerObj;
+        [SerializeField] private GameObject _playerPrefab;
+        [SerializeField] private GameObject _aiPrefab;
         [SerializeField] private Vector2Int _gridWorldSize;
         [SerializeField] private float _nodeRadius;
         [SerializeField] private Tilemap _pathfindingMap;
@@ -27,7 +28,6 @@ namespace Assets.Core
         private Grid2D _grid;
         private LevelMap _map;
         private List<IPawnFactory> factories = new List<IPawnFactory>();
-        //private PlayerPawn _player;
 
         public GameTime GameTime => _map.GameTime;
 
@@ -42,6 +42,7 @@ namespace Assets.Core
             var spawners = FindObjectsOfType<SpawnerBehaviour>();
             foreach (var spawner in spawners)
             {
+                spawner.Init();
                 var spawnerPoint = _grid.GridPositionFromWorldPoint(spawner.WorldPosition);
                 if (spawner.IsPlayerControlled)
                 {
@@ -49,6 +50,13 @@ namespace Assets.Core
                     playerFactory.SetPosition(spawnerPoint.x, spawnerPoint.y);
                     _map.AddOnstartableModel(playerFactory);
                     factories.Add(playerFactory);
+                }
+                else
+                {
+                    var aiFactory = new AIPawnFactory(_map);
+                    aiFactory.SetPosition(spawnerPoint.x, spawnerPoint.y);
+                    _map.AddOnstartableModel(aiFactory);
+                    factories.Add(aiFactory);
                 }
             }
         }
@@ -74,13 +82,17 @@ namespace Assets.Core
             var worldPos = _grid.WorldPointFromGridPosition(new Vector2Int(transform.X, transform.Y));
             if (pawn.isPlayerControlled)
             {
-                var obj = Instantiate(_playerObj, worldPos, Quaternion.identity, _playerPawnParent);
+                var obj = Instantiate(_playerPrefab, worldPos, Quaternion.identity, _playerPawnParent);
                 obj.GetComponent<PawnPresenter>().Init(_grid, pawn).enabled = true;
                 obj.GetComponent<PlayerInputHandler>().Init(_grid, pawn, _map).enabled = true;
                 obj.GetComponent<PathPresenter>().Init(_grid, pawn).enabled = true;
             }
-            Debug.Log($"Pawn spawned {pawn}. IsPlayerControlled: {pawn.isPlayerControlled}");
+            else
+            {
+                var obj = Instantiate(_aiPrefab, worldPos, Quaternion.identity, _playerPawnParent);
+                obj.GetComponent<PawnPresenter>().Init(_grid, pawn).enabled = true;
+            }
+            Debug.Log($"Pawn spawned {pawn}. Team:{pawn.Team}, IsPlayerControlled: {pawn.isPlayerControlled}");
         }
-
     }
 }

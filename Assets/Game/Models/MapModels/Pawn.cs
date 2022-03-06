@@ -17,7 +17,8 @@ namespace Assets.Game.Models.MapModels
             _teamNumber = team;
         }
 
-        public bool isPlayerControlled => _teamNumber == 0;
+        public bool isPlayerControlled => _teamNumber == 0; //TODO сделать отдельное поле
+        public int Team => _teamNumber;
 
         public void AttachComponent(PawnComponent component)
         {
