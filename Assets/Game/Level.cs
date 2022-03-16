@@ -6,6 +6,7 @@ using Assets.Game.Core.Presenters.Map;
 using Assets.Game.Core.Spawners;
 using Assets.Game.Core.Time;
 using Assets.Game.Models.MapModels;
+using Assets.Game.Models.MapModels.PawnModels;
 using Assets.Game.Models.MapModels.Spawners;
 using System.Collections.Generic;
 using UnityEngine;

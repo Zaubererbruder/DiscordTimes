@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Game.Models.MapModels
+namespace Assets.Game.Models.MapModels.PawnModels
 {
     public class PawnTransform : PawnComponent
     {

@@ -1,5 +1,6 @@
 ﻿using Assets.Game.Core.Pathfinding;
 using Assets.Game.Models.MapModels;
+using Assets.Game.Models.MapModels.PawnModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

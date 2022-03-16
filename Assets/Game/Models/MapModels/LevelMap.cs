@@ -1,7 +1,9 @@
 ﻿using Assets.Game.Core.Pathfinding;
 using Assets.Game.Core.Time;
+using Assets.Game.Models.MapModels.PawnModels;
 using Assets.Game.Models.MapModels.Spawners;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +26,11 @@ namespace Assets.Game.Models.MapModels
             get { return _map[x, y]; }
             set { _map[x, y] = value; }
         }
+
+        public IEnumerable<MapCell> MapCells => from i in Enumerable.Range(0, _map.GetLength(0))
+                                              from j in Enumerable.Range(0, _map.GetLength(1))
+                                              where _map[i, j] != null
+                                              select _map[i, j];
 
         public GridGraph Graph => _graph;
         public GameTime GameTime => _gameTime;
@@ -76,6 +83,5 @@ namespace Assets.Game.Models.MapModels
         {
             _onStarables.Add(onstrtModel);
         }
-
     }
 }

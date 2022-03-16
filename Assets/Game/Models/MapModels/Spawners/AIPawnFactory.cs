@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Assets.Game.Models.MapModels.PawnModels;
+using Assets.Game.Models.MapModels.PawnModels.AIMovementActions;
+using Assets.Game.Models.MapModels.PawnModels.AIMovementRules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,6 +43,13 @@ namespace Assets.Game.Models.MapModels.Spawners
             var movement = new PawnPathMovement();
             movement.SetSpeed(5);
             pawn.AttachComponent(movement);
+
+            var aiMovement = new AIMovement();
+
+            var action = new MoveAIMovementAction(_map.Graph[15,15]);
+            var rule = new WhenTimeAIMovementRule(_map.GameTime, (time) => { return time.Time.Hour == 7; }, action);
+            aiMovement.Rules.Add(rule);
+            pawn.AttachComponent(aiMovement);
 
             _map.AddPawnToMap(pawn);
             PawnSpawned?.Invoke(pawn);

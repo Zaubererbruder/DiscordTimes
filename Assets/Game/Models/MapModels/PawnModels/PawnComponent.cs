@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Game.Models.MapModels
+namespace Assets.Game.Models.MapModels.PawnModels
 {
     public abstract class PawnComponent
     {
@@ -12,7 +12,7 @@ namespace Assets.Game.Models.MapModels
 
         public Pawn Owner { get => _owner; internal set => _owner = value; }
 
-        public virtual void Init()
+        internal virtual void Init()
         {
 
         }

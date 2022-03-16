@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Game.Models.MapModels
+namespace Assets.Game.Models.MapModels.PawnModels
 {
     public class PawnPathMovement : PawnComponent
     {
@@ -23,7 +23,7 @@ namespace Assets.Game.Models.MapModels
             
         }
 
-        public override void Init()
+        internal override void Init()
         {
             _transform = GetComponent<PawnTransform>();
             if (_transform == null)
