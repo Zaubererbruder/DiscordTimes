@@ -2,7 +2,7 @@
     "name": "ModelsAssembly",
     "rootNamespace": "",
     "references": [
-        "GUID:09b0f79b3664ed9419683b246ecfa451"
+        "GUID:fa2d65422038ed84aa8e3fd3e517db99"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

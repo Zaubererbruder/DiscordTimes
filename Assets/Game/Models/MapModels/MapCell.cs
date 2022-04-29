@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Assets.Game.Models.MapModels.PawnModels;
 
 namespace Assets.Game.Models.MapModels
 {
     public class MapCell
     {
-        private int _gridX, _gridY;
-        private float _cost;
-
-        public MapCell(int x, int y, float cost)
+        public MapCell(int x, int y)
         {
-            _gridX = x;
-            _gridY = y;
-            _cost = cost;
+            X = x;
+            Y = y;
         }
 
-        public int X => _gridX;
-        public int Y => _gridY;
-        public float Cost => _cost;
+        public int X { get; private set; }
+        public int Y { get; private set; }
+
+        public Pawn Pawn { get; set; }
+
     }
 }

@@ -9,7 +9,6 @@ namespace Assets.Game.Models.MapModels.Spawners
 {
     public interface IPawnFactory
     {
-        public Pawn Create();
-        public event Action<Pawn> PawnSpawned;
+        public Pawn Create(int x, int y, int teamNumber);
     }
 }

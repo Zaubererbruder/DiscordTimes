@@ -1,48 +1,36 @@
-﻿using Assets.Game.Core.Pathfinding;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Game.Models.MapModels.PawnModels
 {
     public class Pawn
     {
-        List<PawnComponent> _components = new List<PawnComponent>();
         private int _teamNumber;
+        private bool _isPlayerControlled;
+        private PawnMovement _movement;
 
-        public Pawn(int team)
+        public Pawn(int x, int y, int team)
         {
+            X = x;
+            Y = y;
             _teamNumber = team;
+            _isPlayerControlled = _teamNumber == 0;
+            _movement = new PawnMovement();
         }
 
-        public bool isPlayerControlled => _teamNumber == 0; //TODO сделать отдельное поле
+        public int X { get; private set; }
+        public int Y { get; private set; }
+        public bool IsPlayerControlled => _isPlayerControlled;
         public int Team => _teamNumber;
 
-        public void AttachComponent(PawnComponent component)
+        public void Update(float deltatime)
         {
-            if (component == null)
-                throw new ArgumentNullException(nameof(component));
-
-            component.Owner = this;
-            component.Init();
-            _components.Add(component);
+            _movement.Update(deltatime);
         }
 
-        public T GetComponent<T>() where T:PawnComponent
+        public void SetMovementDestination(Position goal, float timecost)
         {
-            foreach(var comp in _components)
-            {
-                if (comp is T)
-                    return (T)comp;
-            }
-            return null;
-        }
-
-        internal void Update(float deltatime)
-        {
-            _components.ForEach((comp) => comp.Update(deltatime));
+            _movement.SetDestination(goal, timecost);
         }
     }
 }

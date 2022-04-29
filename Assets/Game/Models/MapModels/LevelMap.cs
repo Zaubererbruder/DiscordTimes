@@ -1,78 +1,49 @@
-﻿using Assets.Game.Core.Pathfinding;
-using Assets.Game.Core.Time;
+﻿using Assets.Game.Core.Time;
 using Assets.Game.Models.MapModels.PawnModels;
-using Assets.Game.Models.MapModels.Spawners;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Game.Models.MapModels
 {
     public class LevelMap
     {
-        private MapCell[,] _map;
-        private GridGraph _graph;
-        private GameTime _gameTime;
+        private LevelData _levelData;
         private List<Pawn> _pawns = new List<Pawn>();
         private List<IOnStartableModel> _onStarables = new List<IOnStartableModel>();
         private List<IUpdateableModel> _updateables = new List<IUpdateableModel>();
-        private IPawnFactory _pawnBuilder;
 
-        public MapCell this[int x, int y]
-        {
-            get { return _map[x, y]; }
-            set { _map[x, y] = value; }
-        }
-
-        public IEnumerable<MapCell> MapCells => from i in Enumerable.Range(0, _map.GetLength(0))
-                                              from j in Enumerable.Range(0, _map.GetLength(1))
-                                              where _map[i, j] != null
-                                              select _map[i, j];
-
-        public GridGraph Graph => _graph;
-        public GameTime GameTime => _gameTime;
+        public GameTime Gametime => _levelData.Gametime;
 
         public IReadOnlyList<Pawn> Pawns => _pawns;
 
-        public LevelMap(MapCell[,] map)
+        public LevelMap(LevelData leveldata)
         {
-            _gameTime = new GameTime(3600);
-            _map = map;
-            _graph = new GridGraph(_map.GetLength(0), _map.GetLength(1));
-            foreach(var mapCell in _map)
+            _levelData = leveldata;
+            foreach (var mapcell in _levelData.MapData.Map)
             {
-                if (mapCell == null)
-                    continue;
-
-                _graph.AddNode(mapCell.X, mapCell.Y, mapCell.Cost);
+                if (mapcell != null)
+                    if (mapcell.Pawn != null)
+                    {
+                        _pawns.Add(mapcell.Pawn);
+                    }
             }
-            _pawnBuilder = new PlayerPawnFactory(this);
+
         }
 
         public void Start()
-        {
-            OnStart();
-        }
-
-        private void OnStart()
         {
             _onStarables.ForEach((onstartable) => onstartable.OnStart());
         }
 
         public void Update(float deltaTime)
         {
-            _gameTime.Update(deltaTime);
-            _pawns.ForEach((pawn) => pawn?.Update(deltaTime));
-            _updateables.ForEach((upd) => upd.Update(deltaTime));
+            _pawns.ForEach((pawn) => pawn.Update(deltaTime));
+            _levelData.Gametime.Update(deltaTime);
         }
 
-        public void AddPawnToMap(Pawn pawn) 
-        {
-            _pawns.Add(pawn);
-        }
+        //public void AddPawnToMap(Pawn pawn) 
+        //{
+        //    _pawns.Add(pawn);
+        //}
 
         public void AddUpdateableModel(IUpdateableModel updModel)
         {

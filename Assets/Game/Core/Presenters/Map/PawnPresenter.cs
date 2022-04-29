@@ -1,18 +1,11 @@
-﻿using Assets.Game.Models.MapModels;
-using Assets.Game.Models.MapModels.PawnModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Assets.Game.Models.MapModels.PawnModels;
 using UnityEngine;
+using Zenject;
 
 namespace Assets.Game.Core.Presenters.Map
 {
-    public class PawnPresenter : MonoBehaviour
+    public class PawnPresenter : ModelPresenter<Pawn>
     {
-        private Pawn _player;
-        private PawnTransform _pawnTransform;
         private Transform _transform;
         private Grid2D _grid;
 
@@ -21,17 +14,18 @@ namespace Assets.Game.Core.Presenters.Map
             _transform = transform;
         }
 
-        public PawnPresenter Init(Grid2D grid, Pawn player)
+        [Inject]
+        public void Construct(Grid2D grid)
         {
             _grid = grid;
-            _player = player;
-            _pawnTransform = player.GetComponent<PawnTransform>();
-            return this;
         }
 
         private void Update()
         {
-            _transform.position = _grid.WorldPointFromGridPosition(new Vector2Int(_pawnTransform.X, _pawnTransform.Y));
+            if (_grid == null) 
+                return;
+
+            _transform.position = _grid.WorldPointFromGridPosition(new Vector2Int(Model.X, Model.Y));
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace Assets.Game.Core.Presenters
 {
@@ -17,41 +18,18 @@ namespace Assets.Game.Core.Presenters
 
         private Grid2D _grid;
         private List<GameObject> _pointsObjects = new List<GameObject>();
-        private PawnPathMovement _pawnMovement;
 
         private Pawn _player;
-        public void OnEnable()
-        {
-            if (_pawnMovement == null)
-                return;
 
-            _pawnMovement.PathUpdated += OnPathUpdateHandler;
-        }
-
-        public void OnDisable()
-        {
-            if (_pawnMovement == null)
-                return;
-
-            _pawnMovement.PathUpdated -= OnPathUpdateHandler;
-        }
-
-        public PathPresenter Init(Grid2D grid, Pawn player)
+        [Inject]
+        public void Construct(Grid2D grid)
         {
             _grid = grid;
-            _player = player;
-            _pawnMovement = player.GetComponent<PawnPathMovement>();
-
-            if (enabled)
-                OnEnable();
-
-            return this;
         }
 
-
-        private void OnPathUpdateHandler(GridPath path)
+        public void Init(Pawn player)
         {
-            UpdatePath(path);
+            _player = player;
         }
 
         private void ClearExistedPath()
@@ -63,16 +41,16 @@ namespace Assets.Game.Core.Presenters
             _pointsObjects.Clear();
         }
 
-        public void UpdatePath(GridPath path)
-        {
-            ClearExistedPath();
+        //public void UpdatePath(GridPath path)
+        //{
+        //    //ClearExistedPath();
 
-            foreach (var node in path.PathNodes)
-            {
-                var obj = Instantiate(_pathObj, _grid.WorldPointFromGridPosition(node.GridPosition), Quaternion.identity, _parentForPathObjs);
-                _pointsObjects.Add(obj);
-            }
+        //    //foreach (var node in path.PathNodes)
+        //    //{
+        //    //    var obj = Instantiate(_pathObj, _grid.WorldPointFromGridPosition(node.GridPosition), Quaternion.identity, _parentForPathObjs);
+        //    //    _pointsObjects.Add(obj);
+        //    //}
 
-        }
+        //}
     }
 }

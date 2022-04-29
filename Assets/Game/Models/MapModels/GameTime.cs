@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 
 namespace Assets.Game.Core.Time
 {
+    [Serializable]
     public class GameTime
     {
-        private DateTime _time = DateTime.MinValue;
-        private float _multiplier;
+        private float _multiplier = 3600;
 
-        public GameTime(float multiplier)
+        public GameTime()
         {
-            _multiplier = multiplier;
+            
         }
 
-        public DateTime Time => _time;
+        public DateTime Time { get; private set; }
 
         public event Action TimeChanged;
 
         public void Update(float deltaTime)
         {
-            var hour = _time.Hour;
-            _time = _time.AddSeconds(deltaTime * _multiplier);
+            var hour = Time.Hour;
+            Time = Time.AddSeconds(deltaTime * _multiplier);
 
-            if (hour != _time.Hour)
+            if (hour != Time.Hour)
                 TimeChanged?.Invoke();
         }
     }
